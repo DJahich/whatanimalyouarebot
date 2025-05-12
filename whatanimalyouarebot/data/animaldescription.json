@@ -1,0 +1,44 @@
+{
+    "лев": {
+      "name": "Индийский Лев",
+      "description": "Царь зверей, хозяин жизни",
+      "image": "media/images/lev.jpg",
+      "guardian_link": "https://moscowzoo.ru/animals/kinds/indiyskiy_lev"
+    },
+    "слон": {
+      "name": "Азиатский слон",
+      "description": "Большой и мудрый, немногословный и спокойный.",
+      "image": "media/images/slon.jpeg",
+      "guardian_link": "https://moscowzoo.ru/animals/kinds/aziatskiy_slon"
+    },
+    "альпака": {
+      "name": "Альпака",
+      "description": "Ты звезда современного интернета и любитель потусить.",
+      "image": "media/images/alpaka.jpeg",
+      "guardian_link": "https://moscowzoo.ru/animals/kinds/alpaka"
+    },
+    "панда": {
+        "name": "Большая панда",
+        "description": "Мастер по расслаблению. Когда все суетятся — ты уже завернулся в одеялко и делаешь мордочку «не трогай меня».",
+        "image": "media/images/panda",
+        "guardian_link": "https://moscowzoo.ru/animals/kinds/bolshaya_panda"
+      },
+    "волк": {
+      "name": "Европейский волк",
+      "description": "Тот самый одиночка, загадочен и немногословен",
+      "image": "media/images/volk.jpeg",
+      "guardian_link": "https://moscowzoo.ru/animals/kinds/evropeyskiy_volk"
+    },
+    "кот": {
+      "name": "Дальневосточный лесной кот",
+      "description": "Ты ценишь уют, еду и возможность поспать подольше. Но если понадобится — покажешь коготки.",
+      "image": "media/images/kot",
+      "guardian_link": "https://moscowzoo.ru/animals/kinds/dalnevostochnyy_lesnoy_kot"
+    },
+    "кенгуру": {
+      "name": "Кенгуру",
+      "description": "Бесконечно активен и весел, но способный показать бойкий характер.",
+      "image": "media/images/kenguru",
+      "guardian_link": "https://moscowzoo.ru/animals/kinds/kenguru_benneta"
+    }
+  }
