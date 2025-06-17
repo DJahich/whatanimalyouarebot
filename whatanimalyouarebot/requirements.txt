@@ -1,0 +1,4 @@
+aiogram==3.0.0b7 
+sqlite3
+Pillow==9.5.0    
+python-dotenv     

@@ -1,19 +1,23 @@
-import logging
-from aiogram import Router
-from aiogram.filters import CommandStart
-from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram import Router, types
+from aiogram.filters import Command
+from aiogram.fsm.context import FSMContext
+
+from templates.intro import WELCOME_MESSAGE
+from services.database import Database
 
 router = Router()
-logger = logging.getLogger("whatanimalyouarebot.start")
 
-@router.message(CommandStart())
-async def cmd_start(message: Message):
-    user = message.from_user
-    logger.info(f"Пользователь {user.id} (@{user.username or user.full_name}) нажал /start")
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="Начать викторину", callback_data="start_quiz")]
-    ])
+@router.message(Command("start"))
+async def cmd_start(message: types.Message, state: FSMContext):
+    await state.clear()
+    db = Database()
+    user_id = message.from_user.id
+    
+    if not db.user_exists(user_id):
+        db.add_user(user_id, message.from_user.full_name)
+    
     await message.answer(
-        "Узнай свое тотемное животное \nГотов пройти викторину?",
-        reply_markup=kb
+        WELCOME_MESSAGE,
+        parse_mode="Markdown"
     )
+    await message.answer("Начнем тест! Ответьте на несколько вопросов.")

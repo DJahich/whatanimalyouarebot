@@ -1,18 +1,27 @@
-# bot/handlers/sharing.py
+from aiogram import Router, types
+from aiogram.filters import Command
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-import logging
-from aiogram import Router, types, F
-
-from bot.services.sharing import share_result
+from services.database import Database
 
 router = Router()
-logger = logging.getLogger("whatanimalyouarebot.sharing")
 
-@router.callback_query(F.data.startswith("share_"))
-async def share_callback(callback: types.CallbackQuery):
-    totem_key = callback.data.replace("share_", "")
-    user = callback.from_user
-    user_name = user.first_name or user.username or str(user.id)
-    logger.info(f"Пользователь {user.id} делится результатом: {totem_key}")
-    await share_result(callback.message, totem_key, user_name)
-    await callback.answer()
+@router.message(Command("share"))
+async def cmd_share(message: types.Message):
+    db = Database()
+    user_id = message.from_user.id
+    animal = db.get_user_animal(user_id)
+    
+    if animal:
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(
+                text="Поделиться результатом",
+                switch_inline_query=f"Моё животное - {animal}")
+            ]
+        ])
+        await message.answer(
+            f"Ваше животное: {animal}",
+            reply_markup=keyboard
+        )
+    else:
+        await message.answer("Сначала пройдите тест (/start)")

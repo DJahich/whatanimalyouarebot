@@ -1,41 +1,18 @@
-import logging
-import os
-
-from aiogram import Router, types, F
-from aiogram.fsm.state import State, StatesGroup
-from aiogram.fsm.context import FSMContext
+from aiogram import Router, types
+from aiogram.filters import Command
+from aiogram import F
 
 router = Router()
-logger = logging.getLogger("whatanimalyouarebot.feedback")
 
-class Feedback(StatesGroup):
-    waiting_for_text = State()
-
-@router.callback_query(F.data == "feedback")
-async def start_feedback(callback: types.CallbackQuery, state: FSMContext):
-    logger.info(f"Пользователь {callback.from_user.id} инициировал отзыв")
-    await callback.message.answer(
-        "Укажите, что вам понравилось и что можно улучшить:"
+@router.message(Command("feedback"))
+async def cmd_feedback(message: types.Message):
+    await message.answer(
+        "💬 Оставьте ваш отзыв одним сообщением, "
+        "и мы обязательно его рассмотрим!"
     )
-    await state.set_state(Feedback.waiting_for_text)
-    await callback.answer()
 
-@router.message(Feedback.waiting_for_text)
-async def receive_feedback(message: types.Message, state: FSMContext):
-    user = message.from_user
-    text = message.text.strip()
-
-    feedback_dir = "data"
-    os.makedirs(feedback_dir, exist_ok=True)
-    feedback_path = os.path.join(feedback_dir, "feedback.txt")
-
-    try:
-        with open(feedback_path, "a", encoding="utf-8") as f:
-            f.write(f"{user.id} (@{user.username or user.first_name}): {text}\n")
-        logger.info(f"Отзыв от {user.id} сохранён")
-        await message.answer("Спасибо за вашу оценку")
-    except Exception as e:
-        logger.exception("Ошибка при сохранении отзыва")
-        await message.answer("Не удалось сохранить отзыв")
-
-    await state.clear()
+@router.message(F.text & ~F.text.startswith('/'))
+async def process_feedback(message: types.Message):
+    with open("data/feedback.txt", "a") as f:
+        f.write(f"{message.from_user.id}: {message.text}\n")
+    await message.answer("Спасибо за ваш отзыв!")
